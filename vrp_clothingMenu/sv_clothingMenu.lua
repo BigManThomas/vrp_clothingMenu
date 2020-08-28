@@ -4,7 +4,6 @@ vRP = Proxy.getInterface("vRP")
 
 RegisterServerEvent('clothingMenu:saveClothing')
 AddEventHandler('clothingMenu:saveClothing', function(name, model, hat, hat_texture, glasses, glasses_texture, ear_accessories, ear_accessories_texture, watches, watches_texture, bracelets, bracelets_texture, mask, mask_texture, shirt, shirt_texture, undershirt, undershirt_texture, pants, pants_texture, shoes, shoes_texture, bags, bags_texture, vest, vest_texture, accessories, accessories_texture, badges, badges_texture, face, arms, arms_texture)
-    print("trying to save clothes")
     local user_id = vRP.getUserId({source})
 
     MySQL.Sync.execute("INSERT INTO saved_clothing (user_id, name, model, hat, hat_texture, glasses, glasses_texture, ear_accessories, ear_accessories_texture, watches, watches_texture, bracelets, bracelets_texture, mask, mask_texture, shirt, shirt_texture, undershirt, undershirt_texture, pants, pants_texture, shoes, shoes_texture, bags, bags_texture, vest, vest_texture, accessories, accessories_texture, badges, badges_texture, face, arms, arms_texture) VALUES (@user_id, @name, @model, @hat, @hat_texture, @glasses, @glasses_texture, @ear_accessories, @ear_accessories_texture, @watches, @watches_texture, @bracelets, @bracelets_texture, @mask, @mask_texture, @shirt, @shirt_texture, @undershirt, @undershirt_texture, @pants, @pants_texture, @shoes, @shoes_texture, @bags, @bags_texture, @vest, @vest_texture, @accessories, @accessories_texture, @badges, @badges_texture, @face, @arms, @arms_texture)", {
@@ -43,7 +42,6 @@ AddEventHandler('clothingMenu:saveClothing', function(name, model, hat, hat_text
         ['arms'] = arms,
         ['arms_texture'] = arms_texture,
     }, function() end)
-    print(name)
 end)
 
 RegisterServerEvent('clothingMenu:retrieveSavedClothesIDs')
@@ -64,12 +62,7 @@ RegisterServerEvent('clothingMenu:retrieveSavedClothing')
 AddEventHandler('clothingMenu:retrieveSavedClothing', function(id)
     local _source = source
     local user_id = vRP.getUserId({source})
-    -- MySQL.Async.fetchAll('SELECT * FROM saved_clothing WHERE user_id = @user_id AND id = @id', {['user_id'] = user_id, ['id'] = id}, function(result)
-    --     TriggerClientEvent('clothingMenu:setSavedClothes', _source, result.model, result.hat, result.hat_texture, result.glasses, result.glasses_texture, result.ear_accessories, result.ear_accessories_texture, result.watches, result.watches_texture, result.bracelets, result.bracelets_texture, result.mask, result.mask_texture, result.shirt, result.shirt_texture, result.undershirt, result.undershirt_texture, result.pants, result.pants_texture, result.shoes, result.shoes_texture, result.bags, result.bags_texture, result.vest, result.vest_texture, result.accessories, result.accessories_texture, result.badges, result.badges_texture, result.face, result.arms, result.arms_texture)
-    --     print(model)
-    -- end)
     local result = MySQL.Sync.fetchAll('SELECT * FROM saved_clothing WHERE user_id = @user_id AND id = @id', {['user_id'] = user_id, ['id'] = id})
-    print(result[1].model)
     TriggerClientEvent('clothingMenu:setSavedClothes', _source, result[1].model, result[1].hat, result[1].hat_texture, result[1].glasses, result[1].glasses_texture, result[1].ear_accessories, result[1].ear_accessories_texture, result[1].watches, result[1].watches_texture, result[1].bracelets, result[1].bracelets_texture, result[1].mask, result[1].mask_texture, result[1].shirt, result[1].shirt_texture, result[1].undershirt, result[1].undershirt_texture, result[1].pants, result[1].pants_texture, result[1].shoes, result[1].shoes_texture, result[1].bags, result[1].bags_texture, result[1].vest, result[1].vest_texture, result[1].accessories, result[1].accessories_texture, result[1].badges, result[1].badges_texture, result[1].face, result[1].arms, result[1].arms_texture)
     
 end)

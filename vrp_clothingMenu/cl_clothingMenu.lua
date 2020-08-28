@@ -9,7 +9,6 @@ Keys.Register('E', 'E', 'Open ClothingUI mainMenu', function()
     RageUI.Visible(RMenu:Get('rageUI', 'mainMenu'), not RageUI.Visible(RMenu:Get('rageUI', 'mainMenu')))
 end)
 
---local availableActions = {"Action 1", "Action 2"}
 local actionIndex = 1
 local numberOfDrawableVariations
 local textureNumber = 1
@@ -308,10 +307,7 @@ Citizen.CreateThread(function()
                     if textureNumber >= GetNumHairColors() then
                         textureNumber = 0
                     end
-                    print("should have changed hair colour")
-                    print(textureNumber)
-                    SetPedHairColor(PlayerPedId(), 1, 1)
-                    print(GetPedHairColor(PlayerPedId()))
+                    SetPedHairColor(PlayerPedId(), textureNumber, 1)
                 end
             })
         end)
@@ -470,8 +466,6 @@ function save_clothing()
 
     hair = nil
 
-    print(name)
-    print(model)
     TriggerServerEvent('clothingMenu:saveClothing', name, model, hat, hat_texture, glasses, glasses_texture, ear_accessories, ear_accessories_texture, watches, watches_texture, bracelets, bracelets_texture, mask, mask_texture, shirt, shirt_texture, undershirt, undershirt_texture, pants, pants_texture, shoes, shoes_texture, bags, bags_texture, vest, vest_texture, accessories, accessories_texture, badges, badges_texture, face, arms, arms_texture)
 end
 
@@ -538,7 +532,6 @@ end)
 
 RegisterNetEvent('clothingMenu:setSavedClothes')
 AddEventHandler('clothingMenu:setSavedClothes', function(model, hat, hat_texture, glasses, glasses_texture, ear_accessories, ear_accessories_texture, watches, watches_texture, bracelets, bracelets_texture, mask, mask_texture, shirt, shirt_texture, undershirt, undershirt_texture, pants, pants_texture, shoes, shoes_texture, bags, bags_texture, vest, vest_texture, accessories, accessories_texture, badges, badges_texture, face, arms, arms_texture)
-    print(model)
     while not HasModelLoaded(model) do
         Citizen.Wait(0)
         RequestModel(model)
@@ -567,5 +560,4 @@ AddEventHandler('clothingMenu:setSavedClothes', function(model, hat, hat_texture
     SetPedComponentVariation(PlayerPedId(), 0, face, 0, 0)
     SetPedComponentVariation(PlayerPedId(), 3, arms, arms_texture, 0)
 
-    print("set")
 end)
