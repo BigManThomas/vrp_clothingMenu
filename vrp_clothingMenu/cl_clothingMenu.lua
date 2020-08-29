@@ -2,6 +2,7 @@ RMenu.Add('rageUI', 'mainMenu', RageUI.CreateMenu("Clothing Menu", "mainMenu"))
 RMenu.Add('rageUI', 'changePed', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Ped", "Change ped model"))
 RMenu.Add('rageUI', 'changeClothing', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Clothing", "Change your Clothes"))
 RMenu.Add('rageUI', 'changeBody', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Body Ft's", "Change Body Features"))
+RMenu.Add('rageUI', 'facialFeatures', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Face", "Facial Features"))
 RMenu.Add('rageUI', 'clearProps', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Clear Props", "Clear Props"))
 RMenu.Add('rageUI', 'manageOutfits', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Manage Outfits", "Manage Outfits"))
 
@@ -112,169 +113,169 @@ Citizen.CreateThread(function()
         end)
 
         RageUI.IsVisible(RMenu:Get('rageUI', 'changeClothing'), function()
-            RageUI.Item.List('Hats/Helmets', get_drawables_prop(0), current_clothing("prop", 0, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Hats/Helmets', get_drawables_prop(0), current_clothing("prop", 0, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_prop(0, Index, 0, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures_prop(0, Index) then
+                    if textureNumber > get_textures_prop(0, Index-1) then
                         textureNumber = 0
                     end
                     preview_prop(0, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Glasses', get_drawables_prop(1), current_clothing("prop", 1, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Glasses', get_drawables_prop(1), current_clothing("prop", 1, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_prop(1, Index, 0, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures_prop(1, Index) then
+                    if textureNumber > get_textures_prop(1, Index-1) then
                         textureNumber = 0
                     end
                     preview_prop(1, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Ear Accessories', get_drawables_prop(2), current_clothing("prop", 2, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Ear Accessories', get_drawables_prop(2), current_clothing("prop", 2, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_prop(2, Index, 0, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures_prop(2, Index) then
+                    if textureNumber > get_textures_prop(2, Index-1) then
                         textureNumber = 0
                     end
                     preview_prop(2, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Watches', get_drawables_prop(6), current_clothing("prop", 6, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Watches', get_drawables_prop(6), current_clothing("prop", 6, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_prop(6, Index, 0, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures_prop(6, Index) then
+                    if textureNumber > get_textures_prop(6, Index-1) then
                         textureNumber = 0
                     end
                     preview_prop(6, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Bracelets', get_drawables_prop(7), current_clothing("prop", 7, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Bracelets', get_drawables_prop(7), current_clothing("prop", 7, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_prop(7, Index, 0, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures_prop(7, Index) then
+                    if textureNumber > get_textures_prop(7, Index-1) then
                         textureNumber = 0
                     end
                     preview_prop(7, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Masks', get_drawables(1), current_clothing("drawable", 1, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Masks', get_drawables(1), current_clothing("drawable", 1, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(1, Index, 1, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures(1, Index) then
+                    if textureNumber > get_textures(1, Index-1) then
                         textureNumber = 0
                     end
                     preview_clothing(1, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Shirts/Jackets', get_drawables(11), current_clothing("drawable", 11, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Shirts/Jackets', get_drawables(11), current_clothing("drawable", 11, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(11, Index, 1, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures(11, Index) then
+                    if textureNumber > get_textures(11, Index-1) then
                         textureNumber = 0
                     end
                     preview_clothing(11, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Undershirt', get_drawables(8), current_clothing("drawable", 8, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Undershirt', get_drawables(8), current_clothing("drawable", 8, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(8, Index, 1, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures(8, Index) then
+                    if textureNumber > get_textures(8, Index-1) then
                         textureNumber = 0
                     end
                     preview_clothing(8, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Pants', get_drawables(4), current_clothing("drawable", 4, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Pants', get_drawables(4), current_clothing("drawable", 4, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(4, Index, 1, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures(4, Index) then
+                    if textureNumber > get_textures(4, Index-1) then
                         textureNumber = 0
                     end
                     preview_clothing(4, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Shoes', get_drawables(6), current_clothing("drawable", 6, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Shoes', get_drawables(6), current_clothing("drawable", 6, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(6, Index, 1, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures(6, Index) then
+                    if textureNumber > get_textures(6, Index-1) then
                         textureNumber = 0
                     end
                     preview_clothing(6, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Bags', get_drawables(5), current_clothing("drawable", 5, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Bags', get_drawables(5), current_clothing("drawable", 5, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(5, Index, 1, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures(5, Index) then
+                    if textureNumber > get_textures(5, Index-1) then
                         textureNumber = 0
                     end
                     preview_clothing(5, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Vests', get_drawables(9), current_clothing("drawable", 9, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Vests', get_drawables(9), current_clothing("drawable", 9, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(9, Index, 1, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures(9, Index) then
+                    if textureNumber > get_textures(9, Index-1) then
                         textureNumber = 0
                     end
                     preview_clothing(9, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Accessories', get_drawables(7), current_clothing("drawable", 7, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Accessories', get_drawables(7), current_clothing("drawable", 7, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(7, Index, 1, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures(7, Index) then
+                    if textureNumber > get_textures(7, Index-1) then
                         textureNumber = 0
                     end
                     preview_clothing(7, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Badges', get_drawables(10), current_clothing("drawable", 10, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Badges', get_drawables(10), current_clothing("drawable", 10, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(10, Index, 1, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures(10, Index) then
+                    if textureNumber > get_textures(10, Index-1) then
                         textureNumber = 0
                     end
                     preview_clothing(10, Index, textureNumber, 0)
@@ -282,30 +283,30 @@ Citizen.CreateThread(function()
             })
         end)
         RageUI.IsVisible(RMenu:Get('rageUI', 'changeBody'), function()
-            RageUI.Item.List('Face', get_drawables(0), current_clothing("drawable", 0, false), "Change Your Face", {}, true, {
+            RageUI.Item.List('Face', get_drawables(0), current_clothing("drawable", 0, false)+1, "Change Your Face", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(0, Index, 0, 0)
                 end
             })
-            RageUI.Item.List('Arms/Torso', get_drawables(3), current_clothing("drawable", 3, false), "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Arms/Torso', get_drawables(3), current_clothing("drawable", 3, false)+1, "ENTER To Change Textures", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(3, Index, 0, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= get_textures(3, Index) then
+                    if textureNumber > get_textures(3, Index-1) then
                         textureNumber = 0
                     end
                     preview_clothing(3, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Hair', get_drawables(2), current_clothing("drawable", 2, false), "ENTER To Change Hair Colour", {}, true, {
+            RageUI.Item.List('Hair', get_drawables(2), current_clothing("drawable", 2, false)+1, "ENTER To Change Hair Colour", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(2, Index, 0, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber >= GetNumHairColors() then
+                    if textureNumber > GetNumHairColors() then
                         textureNumber = 0
                     end
                     SetPedHairColor(PlayerPedId(), textureNumber, 1)
@@ -376,6 +377,13 @@ function current_clothing(type, index, texture)
         else
             return GetPedDrawableVariation(PlayerPedId(), index)
         end
+    elseif type == "face" then
+        if texture then
+            --return GetPedHeadOverlayData(PlayerPedId(), index)
+            return 1
+        else
+            return GetPedHeadOverlayValue(PlayerPedId(), index)
+        end
     end
 end
 
@@ -385,6 +393,10 @@ end
 
 function preview_prop(type, index, textureIndex, paletteIndex)
     SetPedPropIndex(PlayerPedId(), type, index-1, textureIndex, paletteIndex)
+end
+
+function preview_face(type, index, opacity)
+
 end
 
 function remove_clothing()
@@ -407,6 +419,16 @@ function get_drawables_prop(type)
         table.insert(numberOfDrawableVariations, i)
     end
     return numberOfDrawableVariations
+end
+
+function get_facial_features(type)
+    numberOfOverlays = {}
+
+    for i=1, GetNumOverlayValues(type), 1 do
+        table.insert(numberOfOverlays, i)
+    end
+
+    return numberOfOverlays
 end
 
 function get_textures(type, index)
@@ -465,7 +487,8 @@ function save_clothing()
     local arms = GetPedDrawableVariation(PlayerPedId(), 3)
     local arms_texture = GetPedTextureVariation(PlayerPedId(), 3)
 
-    hair = nil
+    --local hair = GetPedDrawableVariation(PlayerPedId(), 2)
+    --local hair_color = GetPedHairColor(PlayerPedId())
 
     TriggerServerEvent('clothingMenu:saveClothing', name, model, hat, hat_texture, glasses, glasses_texture, ear_accessories, ear_accessories_texture, watches, watches_texture, bracelets, bracelets_texture, mask, mask_texture, shirt, shirt_texture, undershirt, undershirt_texture, pants, pants_texture, shoes, shoes_texture, bags, bags_texture, vest, vest_texture, accessories, accessories_texture, badges, badges_texture, face, arms, arms_texture)
 end
