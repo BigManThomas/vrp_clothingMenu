@@ -2,6 +2,8 @@ RMenu.Add('rageUI', 'mainMenu', RageUI.CreateMenu("Clothing Menu", "mainMenu"))
 RMenu.Add('rageUI', 'changePed', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Ped", "Change ped model"))
 RMenu.Add('rageUI', 'changeClothing', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Clothing", "Change your Clothes"))
 RMenu.Add('rageUI', 'changeBody', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Body Ft's", "Change Body Features"))
+RMenu.Add('rageUI', 'facialFeatures', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Face", "Facial Features"))
+RMenu.Add('rageUI', 'hairTypes', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Face", "Hair Types"))
 RMenu.Add('rageUI', 'clearProps', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Clear Props", "Clear Props"))
 RMenu.Add('rageUI', 'manageOutfits', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Manage Outfits", "Manage Outfits"))
 
@@ -14,6 +16,11 @@ local numberOfDrawableVariations
 local textureNumber = 1
 local presets = {}
 local temp_table = {}
+local opacity = 0.0
+local faceScale = {-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0}
+local skinMix = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0}
+local eyebrowType
+local highlightID = 0
 
 Citizen.CreateThread(function()
     while (true) do
@@ -47,7 +54,7 @@ Citizen.CreateThread(function()
             })
         end)
         RageUI.IsVisible(RMenu:Get('rageUI', 'changePed'), function()
-            RageUI.Item.Button('MP Male', 'Become a Default Danny', {}, true, {
+            RageUI.Item.Button('MP Male', 'WARNING: Resets all your Body Options', {}, true, {
                 onSelected = function()
                     while not HasModelLoaded(1885233650) do
                         RequestModel(1885233650)
@@ -56,6 +63,7 @@ Citizen.CreateThread(function()
                     SetPlayerModel(PlayerId(), 1885233650)
                     giveWeapons(weapons,true)
                     
+                    SetPedHeadBlendData(PlayerPedId(), 0, 0, 0, 15, 0, 0, 0, 1.0, 0, false)
                     SetPedPropIndex(PlayerPedId(), 0, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 1, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 2, -1, 0, 0)
@@ -76,7 +84,7 @@ Citizen.CreateThread(function()
                     SetPedComponentVariation(PlayerPedId(), 3, 0, 0, 0)
                 end
             })
-            RageUI.Item.Button('MP Female', 'Become a Default Danny (Female)', {}, true, {
+            RageUI.Item.Button('MP Female', 'WARNING: Resets all your Body Options', {}, true, {
                 onSelected = function()
                     while not HasModelLoaded(-1667301416) do
                         Citizen.Wait(1000)
@@ -86,6 +94,7 @@ Citizen.CreateThread(function()
                     SetPlayerModel(PlayerId(), -1667301416)
                     giveWeapons(weapons,true)
 
+                    SetPedHeadBlendData(PlayerPedId(), 0, 0, 0, 15, 0, 0, 0, 1.0, 0, false)
                     SetPedPropIndex(PlayerPedId(), 0, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 1, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 2, -1, 0, 0)
@@ -280,9 +289,19 @@ Citizen.CreateThread(function()
             })
         end)
         RageUI.IsVisible(RMenu:Get('rageUI', 'changeBody'), function()
-            RageUI.Item.List('Face', get_drawables(0), current_clothing("drawable", 0, false)+1, "Change Your Face", {}, true, {
+            RageUI.Item.Button('Facial Features', nil, {RightLabel = ">>>"}, true, {
+                onSelected = function()
+                    RageUI.Visible(RMenu:Get('rageUI', 'facialFeatures'), not RageUI.Visible(RMenu:Get('rageUI', 'facialFeatures')))
+                end
+            })
+            RageUI.Item.Button('Hair Types', nil, {RightLabel = ">>>"}, true, {
+                onSelected = function()
+                    RageUI.Visible(RMenu:Get('rageUI', 'hairTypes'), not RageUI.Visible(RMenu:Get('rageUI', 'hairTypes')))
+                end
+            })
+            RageUI.Item.List('Skin Tone', skinMix, 1, "Change Your Face", {}, true, {
                 onListChange = function(Index, Items)
-                    preview_clothing(0, Index, 0, 0)
+                    SetPedHeadBlendData(PlayerPedId(), 0, 0, 0, 15, 0, 0, 0, skinMix[Index], 0, false)
                 end
             })
             RageUI.Item.List('Arms/Torso', get_drawables(3), current_clothing("drawable", 3, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
@@ -297,16 +316,348 @@ Citizen.CreateThread(function()
                     preview_clothing(3, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Hair', get_drawables(2), current_clothing("drawable", 2, false)+1, "ENTER To Change Hair Colour ("..textureNumber..")", {}, true, {
+            RageUI.Item.List('Body Blemishes', get_facial_features(11), 1, "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 11, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 11, Index, opacity)
+                end
+            })
+            -- RageUI.Item.List('Tattoos', get_drawables(3), current_clothing("drawable", 3, false), "ENTER To Change Textures", {}, true, {
+            --     onListChange = function(Index, Items)
+            --         preview_clothing(3, Index, 0, 0)
+            --     end,
+            --     onSelected = function(Index, Items)
+            --         textureNumber = textureNumber + 1
+            --         if textureNumber >= get_textures(3, Index) then
+            --             textureNumber = 0
+            --         end
+            --         preview_clothing(3, Index, textureNumber, 0)
+            --     end
+            -- })
+        end)
+        RageUI.IsVisible(RMenu:Get('rageUI', 'facialFeatures'), function()
+            RageUI.Item.List('Nose Width', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 0, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Nose Height', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 1, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Nose Peak Length', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 2, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Nose Peak Height', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 4, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Nose Bone Height', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 3, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Nose Bone Twist', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 5, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Eyebrow Type', get_facial_features(2), 1,  "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 2, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 2, Index, opacity)
+                end
+            })
+            RageUI.Item.List('Eyebrow Colour', get_hair_colours(), 1,  "ENTER To Change Highlights ("..highlightID..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlayColor(PlayerPedId(), 2, 1, Index, 1)
+                end,
+                onSelected = function(Index, Items)
+                    highlightID = highlightID + 1
+                    if highlightID > 63 then
+                        highlightID = 0
+                    end
+                    SetPedHeadOverlayColor(PlayerPedId(), 2, 1, Index, highlightID)
+                end
+            })
+            RageUI.Item.List('Eyebrow Height', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 6, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Eyebrow Depth', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 7, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Cheek Bone Height', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 8, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Cheek Bone Width', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 9, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Cheek Width', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 10, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Lips Thickness', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 12, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Jaw-bone Width', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 13, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Jaw-bone Length', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 14, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Chin Size', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 15, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Chin Length', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 16, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Chin Peak Length', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 17, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Chin Hole', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 18, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Neck Thickness', faceScale, 11, "Change Your Face", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedFaceFeature(PlayerPedId(), 19, faceScale[Index])
+                end
+            })
+            RageUI.Item.List('Facial Blemishes', get_facial_features(0), 1, "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 0, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 0, Index-1, opacity)
+                end
+            })
+            RageUI.Item.List('Ageing', get_facial_features(3), 1, "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 3, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 3, Index, opacity)
+                end
+            })
+            RageUI.Item.List('Makeup', get_facial_features(4), 1, "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 4, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 4, Index, opacity)
+                end
+            })
+            RageUI.Item.List('Blush', get_facial_features(5), 1, "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 5, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 5, Index, opacity)
+                end
+            })
+            RageUI.Item.List('Blush Colour', get_hair_colours(), 1,  "ENTER To Change Highlights ("..highlightID..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlayColor(PlayerPedId(), 5, 2, Index, 1)
+                end,
+                onSelected = function(Index, Items)
+                    highlightID = highlightID + 1
+                    if highlightID > 63 then
+                        highlightID = 0
+                    end
+                    SetPedHeadOverlayColor(PlayerPedId(), 5, 2, Index, highlightID)
+                end
+            })
+            RageUI.Item.List('Complexion', get_facial_features(6), 1, "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 6, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 6, Index, opacity)
+                end
+            })
+            RageUI.Item.List('Sun Damage', get_facial_features(7), 1, "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 7, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 7, Index, opacity)
+                end
+            })
+            RageUI.Item.List('Lipstick', get_facial_features(8), 1, "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 8, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 8, Index, opacity)
+                end
+            })
+            RageUI.Item.List('Lipstick Colour', get_hair_colours(), 1,  "ENTER To Change Highlights ("..highlightID..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlayColor(PlayerPedId(), 8, 2, Index, 1)
+                end,
+                onSelected = function(Index, Items)
+                    highlightID = highlightID + 1
+                    if highlightID > 63 then
+                        highlightID = 0
+                    end
+                    SetPedHeadOverlayColor(PlayerPedId(), 8, 2, Index, highlightID)
+                end
+            })
+            RageUI.Item.List('Moles/Freckles', get_facial_features(9), 1, "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 9, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 9, Index, opacity)
+                end
+            })
+            RageUI.Item.List('Lipstick Colour', get_hair_colours(), 1,  "ENTER To Change Highlights ("..highlightID..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlayColor(PlayerPedId(), 10, 1, Index, 1)
+                end,
+                onSelected = function(Index, Items)
+                    highlightID = highlightID + 1
+                    if highlightID > 63 then
+                        highlightID = 0
+                    end
+                    SetPedHeadOverlayColor(PlayerPedId(), 10, 1, Index, highlightID)
+                end
+            })
+        end)
+        RageUI.IsVisible(RMenu:Get('rageUI', 'hairTypes'), function()
+            RageUI.Item.List('Hair', get_drawables(2), current_clothing("drawable", 2, false)+1, "Change Hair Style", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(2, Index, 0, 0)
                 end,
+            })
+            RageUI.Item.List('Hair Colour', get_hair_colours(), 1,  "ENTER To Change Highlights ("..highlightID..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHairColor(PlayerPedId(), Index, highlightID)
+                end,
                 onSelected = function(Index, Items)
-                    textureNumber = textureNumber + 1
-                    if textureNumber > get_textures(2, Index-1) then
-                        textureNumber = 0
+                    highlightID = highlightID + 1
+                    if highlightID > 63 then
+                        highlightID = 0
                     end
-                    preview_clothing(2, Index, textureNumber, 0)
+                    SetPedHairColor(PlayerPedId(), Index, highlightID)
+                end
+            })
+            RageUI.Item.List('Facial Hair', get_facial_features(1), 1, "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 1, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 1, Index, opacity)
+                end
+            })
+            RageUI.Item.List('Facial Hair Colour', get_hair_colours(), 1,  "ENTER To Change Highlights ("..highlightID..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlayColor(PlayerPedId(), 1, 1, Index, 1)
+                end,
+                onSelected = function(Index, Items)
+                    highlightID = highlightID + 1
+                    if highlightID > 63 then
+                        highlightID = 0
+                    end
+                    SetPedHeadOverlayColor(PlayerPedId(), 1, 1, Index, highlightID)
+                end
+            })
+            RageUI.Item.List('Chest Hair', get_facial_features(10), 1, "ENTER To Change Opacity ("..opacity..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlay(PlayerPedId(), 10, Index, opacity)
+                end,
+                onSelected = function(Index, Items)
+                    opacity = opacity + 0.1
+                    if opacity > 1 then
+                        opacity = 0.0
+                    end
+                    SetPedHeadOverlay(PlayerPedId(), 10, Index, opacity)
+                end
+            })
+            RageUI.Item.List('Chest Hair Colour', get_hair_colours(), 1,  "ENTER To Change Highlights ("..highlightID..")", {}, true, {
+                onListChange = function(Index, Items)
+                    SetPedHeadOverlayColor(PlayerPedId(), 10, 1, Index, 1)
+                end,
+                onSelected = function(Index, Items)
+                    highlightID = highlightID + 1
+                    if highlightID > 63 then
+                        highlightID = 0
+                    end
+                    SetPedHeadOverlayColor(PlayerPedId(), 10, 1, Index, highlightID)
                 end
             })
         end)
@@ -374,6 +725,14 @@ function current_clothing(type, index, texture)
         else
             return GetPedDrawableVariation(PlayerPedId(), index)
         end
+    elseif type == "face" then
+        if texture then
+            --return GetPedHeadOverlayData(PlayerPedId(), index)
+            return 1
+        else
+            print(GetPedFaceFeature(PlayerPedId(), index))
+            return GetPedFaceFeature(PlayerPedId(), index)
+        end
     end
 end
 
@@ -385,6 +744,14 @@ function preview_prop(type, index, textureIndex, paletteIndex)
     SetPedPropIndex(PlayerPedId(), type, index-1, textureIndex, paletteIndex)
 end
 
+function get_hair_colours()
+    local numColours = {}
+
+    for i=1, GetNumHairColors(), 1 do
+        table.insert(numColours, i)
+    end
+    return numColours
+end
 
 function get_drawables(type)
     numberOfDrawableVariations = {}
@@ -402,6 +769,16 @@ function get_drawables_prop(type)
         table.insert(numberOfDrawableVariations, i)
     end
     return numberOfDrawableVariations
+end
+
+function get_facial_features(type)
+    numberOfOverlays = {}
+
+    for i=1, GetPedHeadOverlayNum(type), 1 do
+        table.insert(numberOfOverlays, i)
+    end
+
+    return numberOfOverlays
 end
 
 function get_textures(type, index)
