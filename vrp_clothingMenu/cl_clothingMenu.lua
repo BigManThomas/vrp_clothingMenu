@@ -2,7 +2,6 @@ RMenu.Add('rageUI', 'mainMenu', RageUI.CreateMenu("Clothing Menu", "mainMenu"))
 RMenu.Add('rageUI', 'changePed', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Ped", "Change ped model"))
 RMenu.Add('rageUI', 'changeClothing', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Clothing", "Change your Clothes"))
 RMenu.Add('rageUI', 'changeBody', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Body Ft's", "Change Body Features"))
-RMenu.Add('rageUI', 'facialFeatures', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Change Face", "Facial Features"))
 RMenu.Add('rageUI', 'clearProps', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Clear Props", "Clear Props"))
 RMenu.Add('rageUI', 'manageOutfits', RageUI.CreateSubMenu(RMenu:Get('rageUI', 'mainMenu'), "Manage Outfits", "Manage Outfits"))
 
@@ -57,7 +56,6 @@ Citizen.CreateThread(function()
                     SetPlayerModel(PlayerId(), 1885233650)
                     giveWeapons(weapons,true)
                     
-                    SetPedHeadBlendData(PlayerPedId(), 0, 0, 0, 15, 0, 0, 0, 1.0, 0, false) -- needed for hair colour to work?
                     SetPedPropIndex(PlayerPedId(), 0, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 1, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 2, -1, 0, 0)
@@ -88,7 +86,6 @@ Citizen.CreateThread(function()
                     SetPlayerModel(PlayerId(), -1667301416)
                     giveWeapons(weapons,true)
 
-                    SetPedHeadBlendData(PlayerPedId(), 0, 0, 0, 15, 0, 0, 0, 1.0, 0, false) -- needed for hair colour to work?
                     SetPedPropIndex(PlayerPedId(), 0, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 1, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 2, -1, 0, 0)
@@ -113,7 +110,7 @@ Citizen.CreateThread(function()
         end)
 
         RageUI.IsVisible(RMenu:Get('rageUI', 'changeClothing'), function()
-            RageUI.Item.List('Hats/Helmets', get_drawables_prop(0), current_clothing("prop", 0, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Hats/Helmets', get_drawables_prop(0), current_clothing("prop", 0, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_prop(0, Index, 0, 0)
                 end,
@@ -125,7 +122,7 @@ Citizen.CreateThread(function()
                     preview_prop(0, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Glasses', get_drawables_prop(1), current_clothing("prop", 1, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Glasses', get_drawables_prop(1), current_clothing("prop", 1, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_prop(1, Index, 0, 0)
                 end,
@@ -137,7 +134,7 @@ Citizen.CreateThread(function()
                     preview_prop(1, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Ear Accessories', get_drawables_prop(2), current_clothing("prop", 2, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Ear Accessories', get_drawables_prop(2), current_clothing("prop", 2, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_prop(2, Index, 0, 0)
                 end,
@@ -149,7 +146,7 @@ Citizen.CreateThread(function()
                     preview_prop(2, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Watches', get_drawables_prop(6), current_clothing("prop", 6, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Watches', get_drawables_prop(6), current_clothing("prop", 6, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_prop(6, Index, 0, 0)
                 end,
@@ -161,7 +158,7 @@ Citizen.CreateThread(function()
                     preview_prop(6, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Bracelets', get_drawables_prop(7), current_clothing("prop", 7, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Bracelets', get_drawables_prop(7), current_clothing("prop", 7, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_prop(7, Index, 0, 0)
                 end,
@@ -173,7 +170,7 @@ Citizen.CreateThread(function()
                     preview_prop(7, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Masks', get_drawables(1), current_clothing("drawable", 1, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Masks', get_drawables(1), current_clothing("drawable", 1, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(1, Index, 1, 0)
                 end,
@@ -185,7 +182,7 @@ Citizen.CreateThread(function()
                     preview_clothing(1, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Shirts/Jackets', get_drawables(11), current_clothing("drawable", 11, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Shirts/Jackets', get_drawables(11), current_clothing("drawable", 11, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(11, Index, 1, 0)
                 end,
@@ -197,7 +194,7 @@ Citizen.CreateThread(function()
                     preview_clothing(11, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Undershirt', get_drawables(8), current_clothing("drawable", 8, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Undershirt', get_drawables(8), current_clothing("drawable", 8, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(8, Index, 1, 0)
                 end,
@@ -209,7 +206,7 @@ Citizen.CreateThread(function()
                     preview_clothing(8, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Pants', get_drawables(4), current_clothing("drawable", 4, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Pants', get_drawables(4), current_clothing("drawable", 4, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(4, Index, 1, 0)
                 end,
@@ -221,7 +218,7 @@ Citizen.CreateThread(function()
                     preview_clothing(4, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Shoes', get_drawables(6), current_clothing("drawable", 6, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Shoes', get_drawables(6), current_clothing("drawable", 6, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(6, Index, 1, 0)
                 end,
@@ -233,7 +230,7 @@ Citizen.CreateThread(function()
                     preview_clothing(6, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Bags', get_drawables(5), current_clothing("drawable", 5, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Bags', get_drawables(5), current_clothing("drawable", 5, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(5, Index, 1, 0)
                 end,
@@ -245,7 +242,7 @@ Citizen.CreateThread(function()
                     preview_clothing(5, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Vests', get_drawables(9), current_clothing("drawable", 9, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Vests', get_drawables(9), current_clothing("drawable", 9, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(9, Index, 1, 0)
                 end,
@@ -257,7 +254,7 @@ Citizen.CreateThread(function()
                     preview_clothing(9, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Accessories', get_drawables(7), current_clothing("drawable", 7, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Accessories', get_drawables(7), current_clothing("drawable", 7, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(7, Index, 1, 0)
                 end,
@@ -269,7 +266,7 @@ Citizen.CreateThread(function()
                     preview_clothing(7, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Badges', get_drawables(10), current_clothing("drawable", 10, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Badges', get_drawables(10), current_clothing("drawable", 10, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(10, Index, 1, 0)
                 end,
@@ -288,7 +285,7 @@ Citizen.CreateThread(function()
                     preview_clothing(0, Index, 0, 0)
                 end
             })
-            RageUI.Item.List('Arms/Torso', get_drawables(3), current_clothing("drawable", 3, false)+1, "ENTER To Change Textures", {}, true, {
+            RageUI.Item.List('Arms/Torso', get_drawables(3), current_clothing("drawable", 3, false)+1, "ENTER To Change Textures ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(3, Index, 0, 0)
                 end,
@@ -300,16 +297,16 @@ Citizen.CreateThread(function()
                     preview_clothing(3, Index, textureNumber, 0)
                 end
             })
-            RageUI.Item.List('Hair', get_drawables(2), current_clothing("drawable", 2, false)+1, "ENTER To Change Hair Colour", {}, true, {
+            RageUI.Item.List('Hair', get_drawables(2), current_clothing("drawable", 2, false)+1, "ENTER To Change Hair Colour ("..textureNumber..")", {}, true, {
                 onListChange = function(Index, Items)
                     preview_clothing(2, Index, 0, 0)
                 end,
                 onSelected = function(Index, Items)
                     textureNumber = textureNumber + 1
-                    if textureNumber > GetNumHairColors() then
+                    if textureNumber > get_textures(2, Index-1) then
                         textureNumber = 0
                     end
-                    SetPedHairColor(PlayerPedId(), textureNumber, 1)
+                    preview_clothing(2, Index, textureNumber, 0)
                 end
             })
         end)
@@ -377,13 +374,6 @@ function current_clothing(type, index, texture)
         else
             return GetPedDrawableVariation(PlayerPedId(), index)
         end
-    elseif type == "face" then
-        if texture then
-            --return GetPedHeadOverlayData(PlayerPedId(), index)
-            return 1
-        else
-            return GetPedHeadOverlayValue(PlayerPedId(), index)
-        end
     end
 end
 
@@ -424,7 +414,7 @@ end
 function get_facial_features(type)
     numberOfOverlays = {}
 
-    for i=1, GetNumOverlayValues(type), 1 do
+    for i=1, GetPedHeadOverlayNum(type), 1 do
         table.insert(numberOfOverlays, i)
     end
 
