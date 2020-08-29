@@ -57,7 +57,7 @@ Citizen.CreateThread(function()
                     SetPlayerModel(PlayerId(), 1885233650)
                     giveWeapons(weapons,true)
                     
-                    SetHeadBlendPaletteColor(PlayerPedId(), 255, 255, 255, 1)
+                    SetPedHeadBlendData(PlayerPedId(), 0, 0, 0, 15, 0, 0, 0, 1.0, 0, false) -- needed for hair colour to work?
                     SetPedPropIndex(PlayerPedId(), 0, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 1, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 2, -1, 0, 0)
@@ -88,6 +88,7 @@ Citizen.CreateThread(function()
                     SetPlayerModel(PlayerId(), -1667301416)
                     giveWeapons(weapons,true)
 
+                    SetPedHeadBlendData(PlayerPedId(), 0, 0, 0, 15, 0, 0, 0, 1.0, 0, false) -- needed for hair colour to work?
                     SetPedPropIndex(PlayerPedId(), 0, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 1, -1, 0, 0)
                     SetPedPropIndex(PlayerPedId(), 2, -1, 0, 0)
