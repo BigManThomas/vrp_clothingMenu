@@ -385,13 +385,6 @@ function preview_prop(type, index, textureIndex, paletteIndex)
     SetPedPropIndex(PlayerPedId(), type, index-1, textureIndex, paletteIndex)
 end
 
-function preview_face(type, index, opacity)
-
-end
-
-function remove_clothing()
-
-end
 
 function get_drawables(type)
     numberOfDrawableVariations = {}
@@ -409,16 +402,6 @@ function get_drawables_prop(type)
         table.insert(numberOfDrawableVariations, i)
     end
     return numberOfDrawableVariations
-end
-
-function get_facial_features(type)
-    numberOfOverlays = {}
-
-    for i=1, GetPedHeadOverlayNum(type), 1 do
-        table.insert(numberOfOverlays, i)
-    end
-
-    return numberOfOverlays
 end
 
 function get_textures(type, index)
