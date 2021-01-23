@@ -1,4 +1,7 @@
 # vrp_clothingMenu
+
+I no longer plan on updating this repo.
+
 Made by Thomas discord@Thomas.#4655
 
 Clothing UI that uses RageUI(https://github.com/iTexZoz/RageUI) - Required.
